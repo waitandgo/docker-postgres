@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  test_postgres:
+    restart: always
+    container_name: postgres_container
+    image: postgres:11.4-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: test_database
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  test_pgadmin:
+    restart: always
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: 12345678
+    ports:
+      - 5050:80
+    depends_on:
+      - test_postgres
